@@ -19,7 +19,8 @@ if (localStorage.getItem("listItems") === null) {
 	
 }
 
-//list array saves all items in the user's list
+//click and drag to sort list items.
+$('ol').sortable(); 
 
     $('#button').click(function(){
        var toAdd =  $('input[name=checkListItem]').val();
@@ -40,32 +41,55 @@ if (localStorage.getItem("listItems") === null) {
 
        console.log(listArray);
 	   
+	   //adding to local storage
+	   //create a temp object, key and value
 	   var tempObj = {listData:listArray};
+	   //stringify the temp object
 	   var jsonData = JSON.stringify(tempObj);
+	   //set the item in localstorage as a data object
 	   localStorage.setItem('listItems', jsonData);
 
 
     });//end button.click
 	
 	
-    //actions to do when item is removed
-     $(document).on('click','li',function(){
+	//actions to do when item is removed
+	$(document).on('click','li',function(){
 
-		//create variable from this (li)'s text value
+		//create variables from this (li)'s text value
 		var toRemove = $(this).text();
-		
 		var timeStamp = $(this).data('ts');
+		
+		
+		var toDelete = [];
+		for(var i = 0;i<listArray.length;i++)
+		{
+			if((listArray[i].todoItem === toRemove) && (listArray[i].ts === timeStamp))
+		  	{
+				toDelete.push(i);
+		  	}
+		}
+		
+		for(var j = toDelete.length-1;j>= 0;j--)
+		{
+		  listArray.splice(toDelete[j],1);
+		}
 
-		//goes through each item in the array (list)
-		for(var i in listArray){
-			//if an item in the array matches the key of todoItem and the value of toRemove, then take it out
-			if((listArray[i].todoItem === toRemove) && (listArray[i].ts === timeStamp)){
-				listArray.splice(i,1);
-				break;
-			}//end if
-		}//end for
+		
+		
+	
+		//removing from local storage by updating the current listItems
+	   //create a temp object, key and value
+	   var tempObj = {listData:listArray};
+	   //stringify the temp object
+	   var jsonData = JSON.stringify(tempObj);
+	   //set the item in localstorage as a data object
+	   localStorage.setItem('listItems', jsonData);
+		
 		console.log(listArray);
-
+		
+		
+		//remove the HTML element
 		$(this).remove();	
         
     });//end document.onClick
