@@ -4,6 +4,7 @@ if (localStorage.getItem("listItems") === null) {
 	var listArray = new Array();
 
 }else{
+	//localStorage.clear();
 	var jsonString = localStorage.getItem('listItems');
 	var myObj = JSON.parse(jsonString);
 	var listArray = myObj.listData;	
@@ -12,53 +13,73 @@ if (localStorage.getItem("listItems") === null) {
 	//go through listArray, and for each item, 
 	for(var i = 0;i< listArray.length;i++){
 		// grab the object's data .ts and .todoitem, and append it to a list item
-   		stringToAppend += '<li class="item" data-ts="'+ listArray[i].ts +'">' + listArray[i].todoItem + '</li>';
+   		stringToAppend += '<li class="item" data-ts="'+ listArray[i].ts +'">' + listArray[i].todoItem + '<span class="delete"></span></li>';
 	}
 	//take the string from the for loop and add it to the list
 	$('.list').append(stringToAppend);
-	
 }
 
+
 //click and drag to sort list items.
-$('ol').sortable(); 
+//$('ol').sortable(); 
 
     $('#button').click(function(){
-       var toAdd =  $('input[name=checkListItem]').val();
+		
+		//if text box is empty, show an error message and do not add item
+		if($('input[name=checkListItem]').val() == ''){
+			$( "span#errorMessage" ).css( "display","block");
+			
+		//if text box isn't empty, add the value to the array	
+		}else{
+			
+			//hide the error message if it exists.
+			$( "span#errorMessage" ).css( "display","none");
+		
+		   var toAdd =  $('input[name=checkListItem]').val();
+		   
+		   //testing removing slashes
+		   toAdd = toAdd.replace(/\\/g, '&#92;');//backslash
 
-       //makes the items sortable (click and drag to sort)
-       $('ol').sortable(); 
-
-       //This is the object to store, and append to our list
-       var tempObject = {
-        todoItem: toAdd,
-        ts: (new Date().getTime() / 1000)
-       };
-
-       //pushes each item to the array
-       listArray.push(tempObject);
-
-       $('.list').append('<li class="item" data-ts="'+ tempObject.ts +'">' + toAdd + '</li>');
-
-       console.log(listArray);
-	   
-	   //adding to local storage
-	   //create a temp object, key and value
-	   var tempObj = {listData:listArray};
-	   //stringify the temp object
-	   var jsonData = JSON.stringify(tempObj);
-	   //set the item in localstorage as a data object
-	   localStorage.setItem('listItems', jsonData);
+		   
+	
+		   //This is the object to store, and append to our list
+		   var tempObject = {
+			todoItem: toAdd,
+			ts: (new Date().getTime() / 1000)
+		   };
+	
+		   //pushes each item to the array
+		   listArray.push(tempObject);
+	
+		   $('.list').append('<li class="item" data-ts="'+ tempObject.ts +'">' + toAdd + '<span class="delete"></span></li>');
+	
+		   console.log(listArray);
+		   
+		   //adding to local storage
+		   //create a temp object, key and value
+		   var tempObj = {listData:listArray};
+		   //stringify the temp object
+		   var jsonData = JSON.stringify(tempObj);
+		   //set the item in localstorage as a data object
+		   localStorage.setItem('listItems', jsonData);
+		   
+		   //clear the textbox
+		   $('input[name=checkListItem]').val('');
+		
+		}//end else (if text box is not empty)
 
 
     });//end button.click
 	
 	
-	//actions to do when item is removed
-	$(document).on('click','li',function(){
+	//actions to do when list item's span (delete button) is removed
+	$(document).on('click','span',function(){
+		
+		alert($(this).parent().text());
 
 		//create variables from this (li)'s text value
-		var toRemove = $(this).text();
-		var timeStamp = $(this).data('ts');
+		var toRemove = $(this).parent().text();
+		var timeStamp = $(this).parent().data('ts');
 		
 		
 		var toDelete = [];
@@ -84,13 +105,10 @@ $('ol').sortable();
 	   //stringify the temp object
 	   var jsonData = JSON.stringify(tempObj);
 	   //set the item in localstorage as a data object
-	   localStorage.setItem('listItems', jsonData);
-		
-		console.log(listArray);
-		
+	   localStorage.setItem('listItems', jsonData);		
 		
 		//remove the HTML element
-		$(this).remove();	
+		$(this).parent().remove();
         
     });//end document.onClick
 });//end document.ready

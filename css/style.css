@@ -1,27 +1,89 @@
+body{
+	padding:1em;	
+}
+
 h2 {
-    font-family:arial;
+    font-family:arial,sans-serif;
 }
 
 form {
     display: inline-block;
 }
 
+#inputAndButton{
+	width:100%;
+	clear:both;
+}
+
+input[name='checkListItem']{
+	border:1px solid #a3a3a3;
+	width:74%;
+	height:2em;
+	font-size:1.3em;
+	padding:0;	
+}
+
 #button{
     display: inline-block;
-    height:20px;
-	width:70px;
-	background-color:#cc0000;
+	float:right;
+	width:13%;
+	background:#cc0000;
 	font-family:arial;
 	font-weight:bold;
 	color:#ffffff;
 	border-radius: 5px;
 	text-align:center;
-	margin-top:2px;
+	cursor:pointer;
+	height:2em;
+	padding:0;	
+	height:43px;
+
 }
 
-.list {
-	font-family:arial;
+#button:hover{
+	background:#0F3;	
+}
+
+#errorMessage{
+	display:none;
+	padding:0;
+	background:#b10505;
 	color:#fff;
-	background:#333;
+	font-size:1.2em;
+	font-family:arial,sans-serif;
+	margin-top:0;
+	text-align:center;
+}
+
+.list{
+	font-family:arial,sans-serif;
+	color:#fff;
 	border-bottom:1px solid #fff;
+	padding:0;
+	margin:0;
+}
+
+span.delete{
+	color:#b10505;
+	background:#ff0000;
+	display:inline-block;	
+	padding:0;
+	margin-left:1em;
+	margin:0;
+	float:right;
+	font-weight:bold;
+	cursor:pointer;
+	width:20px;
+	height:20px;
+}
+
+
+li{
+	list-style:none;
+	margin:0.5em 0px;
+	background:#333;
+	padding:0;
+	width:85%;	
+	display:inline-block;
+	
 }
