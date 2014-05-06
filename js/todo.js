@@ -75,10 +75,8 @@ if (localStorage.getItem("listItems") === null) {
 	//actions to do when list item's span (delete button) is removed
 	$(document).on('click','span',function(){
 		
-		alert($(this).parent().text());
-
 		//create variables from this (li)'s text value
-		var toRemove = $(this).parent().text();
+		var toRemove = $(this).parent().text().replace(/\\/g, '&#92;');//backslash
 		var timeStamp = $(this).parent().data('ts');
 		
 		
